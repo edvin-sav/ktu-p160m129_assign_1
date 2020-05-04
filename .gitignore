@@ -76,10 +76,10 @@ target/
 .ipynb_checkpoints/
 
 # exclude data from source control by default
-/data/raw/assignment_1/
-/data/raw/assignment_2/
-/data/processed/assignment_1/
-/data/processed/assignment_2/
+/data/raw/assignment_1/.
+/data/raw/assignment_2/.
+/data/processed/assignment_1/.
+/data/processed/assignment_2/.
 
 
 # Mac OS-specific storage files
