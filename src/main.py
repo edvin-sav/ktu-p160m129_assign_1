@@ -37,7 +37,7 @@ def mk_mungy_split(path_to_data, files):
         "--no-copy-header",
         "--no-skip-header",
         "-o {}".format(path_to_data),
-        "--filenames {}".format("files"),
+        "--filenames {}".format(files),
         " {} ".format(os.path.join(path_to_data, "yXsample.txt")),
         "0.6,0.2,0.2"
     ])
@@ -139,11 +139,13 @@ def chk_processed_data(path_to_data, path_to_raw, noskip):
         if (not data_all_txt):
             logger.info("creating data_all.txt")
             subprocess.run(mk_cmd_paste(path_to_raw, path_to_data), shell=True)
-        if (not validation_txt) or (not testing_txt) or (not training_txt):
+        if (not (validation_txt and testing_txt and training_txt)):
             logger.info("creating all sets of txt")
             subprocess.run(mk_mungy_split(
                 path_to_data, "training.txt,validation.txt,testing.txt"), shell=True)
-        if (not validation_vw) or (not testing_vw) or (not training_vw):
+            click.echo(mk_mungy_split(
+                path_to_data, "training.txt,validation.txt,testing.txt"))
+        if (not (validation_vw and testing_vw and training_vw)):
             logger.info("creating all sets of training/testing vw")
             subprocess.run(mk_vw_file(path_to_data, "training"), shell=True)
             subprocess.run(mk_vw_file(path_to_data, "testing"), shell=True)
@@ -305,7 +307,7 @@ def magic_training(task):
             stats = parse_statistics(out)
             mse = stats[0]
             mae = stats[1]
-            best_df = best_df({'task': best_task, 'mse': mse, 'mae': mae}, ignore_index=True)
+            best_df = best_df.append({'task': best_task, 'mse': mse, 'mae': mae}, ignore_index=True)
             best_df.to_csv("{}best_results.csv".format(path_to_models))
             click.echo("That's all")
 

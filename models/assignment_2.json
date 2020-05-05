@@ -1,46 +1,46 @@
 {
     "hyperparams": [
         {
-            "name": "task_1", "L1" : 0.1, "L2" : 0.1, "passes": 20
+            "name": "task_1", "L1" : 0.1, "L2" : 0.1, "passes": 40
         },		
         {
-            "name": "task_2", "L1" : 0.1, "L2" : 0.01, "passes": 20
+            "name": "task_2", "L1" : 0.1, "L2" : 0.01, "passes": 40
         },
         {
-            "name": "task_3", "L1" : 0.1, "L2" : 0.001, "passes": 20
+            "name": "task_3", "L1" : 0.1, "L2" : 0.001, "passes": 40
         },
         {
-            "name": "task_4", "L1" : 0.1, "L2" : 0.00001, "passes": 20
+            "name": "task_4", "L1" : 0.1, "L2" : 0.00001, "passes": 40
         },
         {
-            "name": "task_5", "L1" : 0.01, "L2" : 0.0001, "passes": 20
+            "name": "task_5", "L1" : 0.01, "L2" : 0.0001, "passes": 40
         },
         {
-            "name": "task_6", "L1" : 0.001, "L2" : 0.0001, "passes": 20
+            "name": "task_6", "L1" : 0.001, "L2" : 0.0001, "passes": 40
         },
         {
-            "name": "task_7", "L1" : 0.0001, "L2" : 0.001, "passes": 20
+            "name": "task_7", "L1" : 0.0001, "L2" : 0.001, "passes": 40
         },
         {
-            "name": "task_8", "L1" : 0.0001, "L2" : 0.01, "passes": 20
+            "name": "task_8", "L1" : 0.0001, "L2" : 0.01, "passes": 40
         },
         {
-            "name": "task_9", "L1" : 0.0001, "L2" : 0.1, "passes": 20
+            "name": "task_9", "L1" : 0.0001, "L2" : 0.1, "passes": 40
         },
         {
-            "name": "task_10", "L1" : 0.001, "L2" : 0.001, "passes": 20
+            "name": "task_10", "L1" : 0.001, "L2" : 0.001, "passes": 40
         },
         {
-            "name": "task_11", "L1" : 0.001, "L2" : 0.01, "passes": 20
+            "name": "task_11", "L1" : 0.001, "L2" : 0.01, "passes": 40
         },
         {
-            "name": "task_12", "L1" : 0.5, "L2" : 0.01, "passes": 20
+            "name": "task_12", "L1" : 0.5, "L2" : 0.01, "passes": 40
         },
         {
-            "name": "task_13", "L1" : 0.01, "L2" : 0.5, "passes": 20
+            "name": "task_13", "L1" : 0.01, "L2" : 0.5, "passes": 40
         },
         {
-            "name": "task_14", "L1" : 0.5, "L2" : 0.5, "passes": 20
+            "name": "task_14", "L1" : 0.5, "L2" : 0.5, "passes": 40
         }		
     ]
 }
