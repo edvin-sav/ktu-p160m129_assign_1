@@ -6,7 +6,7 @@ import json
 import pandas as pd
 from subprocess import Popen, PIPE, STDOUT
 from pathlib import Path
-from functools import update_wrapper
+
 
 """ Functions to create cmd for subprocess """
 
@@ -28,6 +28,8 @@ def mk_cmd_paste(path_to_raw, path_to_data, sample=None):
             "> {}".format(os.path.join(path_to_data, "data_all.txt"))
         ])
     return cmd
+
+
 """ For one time? at least code looks better """
 
 
@@ -43,6 +45,7 @@ def mk_mungy_split(path_to_data, files):
     ])
     return cmd
 
+
 """ This is fine... """
 
 
@@ -57,6 +60,7 @@ def mk_vw_file(path_to_data, file):
         "-o {}.vw".format(os.path.join(path_to_data, file))
     ])
     return cmd
+
 
 """ Function to create path name for task """
 
@@ -80,6 +84,7 @@ def mk_path_task(task):
                                           "processed", path)
     return path_to_raw_data, path_to_processed_data
 
+
 """ Function to check if we have for task raw data """
 
 
@@ -94,7 +99,8 @@ def chk_raw_data(path_to_data):
         else:
             click.echo("")
             click.echo("Something went wrong:")
-            msg = f"Raw data files doesn't exist in {path_to_data}, please add them"
+            msg = f"Raw data files doesn't exist in {path_to_data}, \
+            please add them"
             raise click.BadParameter(msg)
     else:
         os.mkdir(path_to_data)
@@ -103,10 +109,12 @@ def chk_raw_data(path_to_data):
         msg = f"created {path_to_data} folder, but please add X.txt and y.txt"
         raise click.BadParameter(msg)
 
+
 """ checking for processed data, if everything is fine"""
 
 
 def chk_processed_data(path_to_data, path_to_raw, noskip):
+    logger = logging.getLogger("creating")
     click.echo('path to data: lalala')
     if (not os.path.isdir(path_to_data)):
         os.mkdir(path_to_data)
@@ -127,7 +135,6 @@ def chk_processed_data(path_to_data, path_to_raw, noskip):
         click.echo("All processed files are ready")
     else:
         click.echo("Something is missing")
-        logger = logging.getLogger("creating")
         if noskip != "True":
             click.echo("Check for any lying cake-sniffers")
             chk_raw_data(path_to_raw)
@@ -142,7 +149,8 @@ def chk_processed_data(path_to_data, path_to_raw, noskip):
         if (not (validation_txt and testing_txt and training_txt)):
             logger.info("creating all sets of txt")
             subprocess.run(mk_mungy_split(
-                path_to_data, "training.txt,validation.txt,testing.txt"), shell=True)
+                path_to_data, "training.txt,validation.txt,testing.txt"),
+                shell=True)
             click.echo(mk_mungy_split(
                 path_to_data, "training.txt,validation.txt,testing.txt"))
         if (not (validation_vw and testing_vw and training_vw)):
@@ -156,10 +164,13 @@ def chk_processed_data(path_to_data, path_to_raw, noskip):
         logger.info("all data which was required created")
         click.echo("We can go further")
 # this could already get hidden into module..
+
+
 """ some vw functions """
 
 
-def mk_cmd_vw_train(path_model, path_readable_model, path_data=None, L1=None, L2=None, passes=20):
+def mk_cmd_vw_train(path_model, path_readable_model,
+                    path_data=None, L1=None, L2=None, passes=20):
     cmd = " ".join([
         "vw",
         "--kill_cache",
@@ -169,7 +180,8 @@ def mk_cmd_vw_train(path_model, path_readable_model, path_data=None, L1=None, L2
         "--quadratic nn",
         "--loss_function squared",
         "--passes {}".format(passes),
-        "--data {}".format(path_data) if path_data and path_data != "-" else "",
+        "--data {}".format(path_data)
+        if path_data and path_data != "-" else "",
         "--final_regressor {}".format(path_model),
         "--readable_model {}".format(path_readable_model),
         "--l1 {}".format(L1) if L1 else "",
@@ -184,7 +196,8 @@ def mk_cmd_vw_predict(path_model, path_predictions, path_data=None):
         "--kill_cache",
         "--normalized",
         "--testonly",
-        "--data {}".format(path_data) if path_data and path_data != "-" else "",
+        "--data {}".format(path_data)
+        if path_data and path_data != "-" else "",
         "--initial_regressor {}".format(path_model),
         "--predictions {}".format(path_predictions),
     ])
@@ -266,8 +279,11 @@ def magic_training(task):
                 task_name = hyperparams["name"]
                 vw_model, vw_readable_model, vw_predictions = mk_vw_train_validate_paths(
                     path_to_models, path_to_processed_data, task_name)
-                cmd_train_str = mk_cmd_vw_train(vw_model, vw_readable_model, path_training_vw,
-                                                hyperparams["L1"], hyperparams["L2"], hyperparams["passes"])
+                cmd_train_str = mk_cmd_vw_train(vw_model, vw_readable_model,
+                                                path_training_vw,
+                                                hyperparams["L1"],
+                                                hyperparams["L2"],
+                                                hyperparams["passes"])
                 cmd_predict_str = mk_cmd_vw_predict(
                     vw_model, vw_predictions, path_testing_vw)
                 cmd_metrics_str = mk_cmd_metrics(
@@ -283,13 +299,15 @@ def magic_training(task):
                 mse = stats[0]
                 mae = stats[1]
                 res_df = res_df.append(
-                    {'task': task_name, 'mse': mse, 'mae': mae}, ignore_index=True)
+                    {'task': task_name, 'mse': mse, 'mae': mae},
+                    ignore_index=True)
                 click.echo("Task named: %s complete" % task_name)
             res_df = res_df.sort_values(by='mse', ascending=True)
             res_df.to_csv("{}best_models.csv".format(path_to_models))
 
             best_task = res_df['task'].iloc[0]
-            cmd_invert_hashes_str = mk_cmd_invert_hashes(best_task, path_testing_vw, path_to_models)
+            cmd_invert_hashes_str = mk_cmd_invert_hashes(
+                best_task, path_testing_vw, path_to_models)
             subprocess.run(cmd_invert_hashes_str, shell=True)
 
             click.echo("Need to try with all data model")
@@ -307,7 +325,8 @@ def magic_training(task):
             stats = parse_statistics(out)
             mse = stats[0]
             mae = stats[1]
-            best_df = best_df.append({'task': best_task, 'mse': mse, 'mae': mae}, ignore_index=True)
+            best_df = best_df.append(
+                {'task': best_task, 'mse': mse, 'mae': mae}, ignore_index=True)
             best_df.to_csv("{}best_results.csv".format(path_to_models))
             click.echo("That's all")
 
@@ -321,7 +340,8 @@ def magic_training(task):
 @click.command()
 @click.option('--task', prompt='Task number, default is ',
               default=1,
-              help='Task number, default is 1. Could be as well 2 for this one')
+              help='Task number, default is 1. \
+              Could be as well 2 for this one')
 @click.option('--noskip', prompt='Check for raw files(recommended)',
               default="True",
               help='Check if raw files exist, recommended \
@@ -342,6 +362,7 @@ def main(task, noskip):
     logger.info("Checking for config file and if ok - we go")
     magic_training(task)
     logger.info("End")
+
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
